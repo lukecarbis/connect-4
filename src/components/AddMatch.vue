@@ -9,9 +9,9 @@
 
     <p>
       <label for="add-match-red">Red Player</label>
-      <select v-model="match.players.red" id="add-match-red">
+      <select v-model="match.red" id="add-match-red">
         <option value="" disabled>Choose a Player</option>
-        <option v-for="(player, idx) of players" :disabled="player === match.players.yellow" v-bind:key="idx" :value="player">
+        <option v-for="(player, idx) of players" :disabled="player === match.yellow" v-bind:key="idx" :value="player">
           {{player.nickname}}
         </option>
       </select>
@@ -19,9 +19,9 @@
 
     <p>
       <label for="add-match-yellow">Yellow Player</label>
-      <select v-model="match.players.yellow" id="add-match-yellow">
+      <select v-model="match.yellow" id="add-match-yellow">
         <option value="" disabled>Choose a Player</option>
-        <option v-for="(player, idx) of players" :disabled="player === match.players.red" v-bind:key="idx" :value="player">
+        <option v-for="(player, idx) of players" :disabled="player === match.red" v-bind:key="idx" :value="player">
           {{player.nickname}}
         </option>
       </select>
@@ -74,7 +74,9 @@ export default {
         date: new Date().toISOString().substring(0, 10),
         first: '',
         winner: '',
-        players: {red: '', yellow: ''}
+        red: '',
+        yellow: '',
+        players: []
       },
       players: []
     }
@@ -91,16 +93,18 @@ export default {
     add () {
       if (
         this.match.date === '' ||
-        this.match.players.red === '' ||
-        this.match.players.yellow === '' ||
+        this.match.red === '' ||
+        this.match.yellow === '' ||
         this.match.first === '' ||
         this.match.winner === ''
       ) {
         return false
       }
-      if (this.match.players.red === this.match.players.yellow) {
+      if (this.match.red === this.match.yellow) {
         return false
       }
+
+      this.match.players = [this.match.red, this.match.yellow]
 
       db.collection('matches').add(this.match)
       this.reset()
@@ -111,9 +115,11 @@ export default {
     },
     reset () {
       this.match.date = new Date().toISOString().substring(0, 10)
-      this.match.players = {red: '', yellow: ''}
+      this.match.players = []
       this.match.winner = ''
       this.match.first = ''
+      this.match.red = ''
+      this.match.yellow = ''
       this.match.close()
     },
     close () {

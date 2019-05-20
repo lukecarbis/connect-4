@@ -2,13 +2,13 @@
   <div>
     <div v-for="match of matches" v-bind:key="match['.key']">
       <p>{{getDate(match.date)}}</p>
-      <p v-if="match.first === match.players.red">
-        <span class="red">{{match.players.red.nickname}}</span> vs. <span class="yellow">{{match.players.yellow.nickname}}</span>
+      <p v-if="match.first === match.red">
+        <span class="red">{{match.red.nickname}}</span> vs. <span class="yellow">{{match.yellow.nickname}}</span>
       </p>
       <p v-else>
-        <span class="yellow">{{match.players.yellow.nickname}}</span> vs. <span class="red">{{match.players.red.nickname}}</span>
+        <span class="yellow">{{match.yellow.nickname}}</span> vs. <span class="red">{{match.red.nickname}}</span>
       </p>
-      <p :class="match.winner === match.players.red ? 'red' : 'yellow'">{{match.winner.nickname}} wins!</p>
+      <p :class="match.winner === match.red ? 'red' : 'yellow'">{{match.winner.nickname}} wins!</p>
     </div>
   </div>
 </template>
