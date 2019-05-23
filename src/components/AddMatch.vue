@@ -43,6 +43,7 @@
       <label for="add-match-winner">Who Won?</label>
       <select v-model="match.winner" id="add-match-winner">
         <option value="" disabled>Choose a Player</option>
+        <option value="__tie">Match Tied</option>
         <template v-for="(player, key) of players">
           <option v-bind:key="key" :value="player" v-if="player">
             {{player.nickname}}
@@ -74,6 +75,7 @@ export default {
         date: new Date().toISOString().substring(0, 10),
         first: '',
         winner: '',
+        result: '',
         red: '',
         yellow: '',
         players: []
@@ -105,6 +107,18 @@ export default {
       }
 
       this.match.players = [this.match.red, this.match.yellow]
+
+      if ( this.match.winner === '__tie' ) {
+        this.match.winner = ''
+        this.match.result = 'tie'
+      } else if ( this.match.winner === this.match.red ) {
+        this.match.result = 'red'
+      } else if ( this.match.winner === this.match.yellow ) {
+        this.match.result = 'yellow'
+      }
+
+      let date = new Date( this.match.date )
+      this.match.date = date
 
       db.collection('matches').add(this.match)
       this.reset()

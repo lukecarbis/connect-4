@@ -8,7 +8,8 @@
       <p v-else>
         <span class="yellow">{{match.yellow.nickname}}</span> vs. <span class="red">{{match.red.nickname}}</span>
       </p>
-      <p :class="match.winner === match.red ? 'red' : 'yellow'">{{match.winner.nickname}} wins!</p>
+      <p v-if="match.winner" :class="match.result">{{match.winner.nickname}} wins!</p>
+      <p v-if="match.result === 'tie'" :class="match.result">Tie!</p>
     </div>
   </div>
 </template>
@@ -31,7 +32,6 @@ export default {
   },
   methods: {
     getDate: function (timestamp) {
-      console.log(timestamp)
       let date = new Date(timestamp.seconds * 1000)
       return date.toLocaleDateString()
     }
