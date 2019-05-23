@@ -4,14 +4,14 @@
 
     <p>
       <label for="add-match-date">Date</label>
-      <datepicker v-model="match.date" id="add-match-date"></datepicker>
+      <datepicker v-model="field.date" id="add-match-date"></datepicker>
     </p>
 
     <p>
       <label for="add-match-red">Red Player</label>
-      <select v-model="match.red" id="add-match-red">
+      <select v-model="field.red" id="add-match-red">
         <option value="" disabled>Choose a Player</option>
-        <option v-for="(player, idx) of players" :disabled="player === match.yellow" v-bind:key="idx" :value="player">
+        <option v-for="player of players" :disabled="player.id === field.yellow" :key="player.id" :value="player.id">
           {{player.nickname}}
         </option>
       </select>
@@ -19,9 +19,9 @@
 
     <p>
       <label for="add-match-yellow">Yellow Player</label>
-      <select v-model="match.yellow" id="add-match-yellow">
+      <select v-model="field.yellow" id="add-match-yellow">
         <option value="" disabled>Choose a Player</option>
-        <option v-for="(player, idx) of players" :disabled="player === match.red" v-bind:key="idx" :value="player">
+        <option v-for="player of players" :disabled="player.id === field.red" :key="player.id" :value="player.id">
           {{player.nickname}}
         </option>
       </select>
@@ -29,10 +29,13 @@
 
     <p>
       <label for="add-match-first">Who Played First?</label>
-      <select v-model="match.first" id="add-match-first">
+      <select v-model="field.first" id="add-match-first">
         <option value="" disabled>Choose a Player</option>
-        <template v-for="(player, key) of players">
-          <option v-bind:key="key" :value="player" v-if="player">
+        <template v-for="player of players">
+          <option :key="player.id" :value="player.id" v-if="player.id === field.red">
+            {{player.nickname}}
+          </option>
+          <option :key="player.id" :value="player.id" v-if="player.id === field.yellow">
             {{player.nickname}}
           </option>
         </template>
@@ -41,11 +44,14 @@
 
     <p>
       <label for="add-match-winner">Who Won?</label>
-      <select v-model="match.winner" id="add-match-winner">
+      <select v-model="field.winner" id="add-match-winner">
         <option value="" disabled>Choose a Player</option>
         <option value="__tie">Match Tied</option>
-        <template v-for="(player, key) of players">
-          <option v-bind:key="key" :value="player" v-if="player">
+        <template v-for="player of players">
+          <option :key="player.id" :value="player.id" v-if="player.id === field.red">
+            {{player.nickname}}
+          </option>
+          <option :key="player.id" :value="player.id" v-if="player.id === field.yellow">
             {{player.nickname}}
           </option>
         </template>
@@ -63,14 +69,12 @@ import datepicker from 'vue-date'
 export default {
   data () {
     return {
-      match: {
+      field: {
         date: new Date().toISOString().substring(0, 10),
         first: '',
         winner: '',
-        result: '',
         red: '',
         yellow: '',
-        players: []
       },
       players: []
     }
@@ -86,45 +90,48 @@ export default {
   methods: {
     add () {
       if (
-        this.match.date === '' ||
-        this.match.red === '' ||
-        this.match.yellow === '' ||
-        this.match.first === '' ||
-        this.match.winner === ''
+        this.field.date === '' ||
+        this.field.red === '' ||
+        this.field.yellow === '' ||
+        this.field.first === '' ||
+        this.field.winner === ''
       ) {
         return false
       }
-      if (this.match.red === this.match.yellow) {
+      if ( this.field.red === this.field.yellow ) {
         return false
       }
 
-      this.match.players = [this.match.red, this.match.yellow]
+      let match = {}
 
-      if ( this.match.winner === '__tie' ) {
-        this.match.winner = ''
-        this.match.result = 'tie'
-      } else if ( this.match.winner === this.match.red ) {
-        this.match.result = 'red'
-      } else if ( this.match.winner === this.match.yellow ) {
-        this.match.result = 'yellow'
+      // Format the data for Firestore
+      match.date = new Date( this.field.date )
+      match.red = db.collection('players').doc( this.field.red )
+      match.yellow = db.collection('players').doc( this.field.yellow )
+      match.players = [match.red, match.yellow]
+
+      if ( this.field.winner === '__tie' ) {
+        match.result = 'tie'
+      } else if ( this.field.winner === this.field.red ) {
+        match.result = 'red'
+        match.winner = match.red
+      } else if ( this.field.winner === this.field.yellow ) {
+        match.result = 'yellow'
+        match.winner = match.yellow
       }
 
-      let date = new Date( this.match.date )
-      this.match.date = date
-
-      db.collection('matches').add(this.match)
+      db.collection('matches').add( match )
       this.reset()
     },
     remove(matchId) {
-      db.collection('matches').doc(matchId).delete()
+      db.collection('matches').doc( matchId ).delete()
     },
     reset () {
-      this.match.date = this.match.date.toISOString().substring(0, 10)
-      this.match.players = []
-      this.match.winner = ''
-      this.match.first = ''
-      this.match.red = ''
-      this.match.yellow = ''
+      this.field.players = []
+      this.field.winner = ''
+      this.field.first = ''
+      this.field.red = ''
+      this.field.yellow = ''
     }
   }
 }
