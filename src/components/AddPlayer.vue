@@ -1,5 +1,5 @@
 <template>
-  <div v-if="display">
+  <div>
     <h2>New Player</h2>
 
     <p>
@@ -23,7 +23,6 @@
     </p>
 
     <button @click="add()">Add</button>
-    <button @click="close()">Close</button>
   </div>
 </template>
 
@@ -31,13 +30,6 @@
 import { db } from '../db'
 
 export default {
-  model: {
-    prop: 'display',
-    event: 'display'
-  },
-  props: {
-    display: Boolean
-  },
   data () {
     return {
       player: {
@@ -59,7 +51,6 @@ export default {
       }
       db.collection('players').add(this.player)
       this.reset()
-      this.close()
     },
     remove (playerId) {
       db.collection('players').doc(playerId).delete()
@@ -68,10 +59,6 @@ export default {
       this.player.name = {first: '', last: ''}
       this.player.nickname = ''
       this.player.email = ''
-      this.close()
-    },
-    close () {
-      this.$emit('display', false)
     }
   }
 }

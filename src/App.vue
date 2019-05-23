@@ -1,35 +1,24 @@
 <template>
   <div id="app" class="app">
-    <h1>Connect 4 Match Results</h1>
+    <h1>Connect 4</h1>
     <nav>
       <ul>
-        <li><button @click="displayAddMatch = true">New Match</button></li>
-        <li><button @click="displayAddPlayer = true">New Player</button></li>
+        <li><a href="/">Results</a></li>
+        <li><a href="/new/match">New Match</a></li>
+        <li><a href="/new/player">New Player</a></li>
       </ul>
     </nav>
-    <AddMatch v-model="displayAddMatch"/>
-    <AddPlayer v-model="displayAddPlayer"/>
-    <ResultsTable/>
+    <RouterView/>
   </div>
 </template>
 
 <script>
-import AddMatch from './components/AddMatch'
-import AddPlayer from './components/AddPlayer'
-import ResultsTable from './components/ResultsTable'
+import RouterView from './components/RouterView'
 
 export default {
   name: 'App',
-  data () {
-    return {
-      displayAddMatch: false,
-      displayAddPlayer: false
-    }
-  },
   components: {
-    AddMatch,
-    AddPlayer,
-    ResultsTable
+    RouterView
   }
 }
 </script>

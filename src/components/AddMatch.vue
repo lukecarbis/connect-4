@@ -1,5 +1,5 @@
 <template>
-  <div v-if="display">
+  <div>
     <h2>New Match</h2>
 
     <p>
@@ -53,7 +53,6 @@
     </p>
 
     <button @click="add()">Add</button>
-    <button @click="close()">Close</button>
   </div>
 </template>
 
@@ -62,13 +61,6 @@ import { db } from '../db'
 import datepicker from 'vue-date'
 
 export default {
-  model: {
-    prop: 'display',
-    event: 'display'
-  },
-  props: {
-    display: Boolean
-  },
   data () {
     return {
       match: {
@@ -122,7 +114,6 @@ export default {
 
       db.collection('matches').add(this.match)
       this.reset()
-      this.close()
     },
     remove(matchId) {
       db.collection('matches').doc(matchId).delete()
@@ -134,10 +125,6 @@ export default {
       this.match.first = ''
       this.match.red = ''
       this.match.yellow = ''
-      this.close()
-    },
-    close () {
-      this.$emit('display', false)
     }
   }
 }
