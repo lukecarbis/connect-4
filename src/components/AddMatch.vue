@@ -128,13 +128,13 @@ export default {
       db.collection('matches').doc(matchId).delete()
     },
     reset () {
-      this.match.date = new Date().toISOString().substring(0, 10)
+      this.match.date = this.match.date.toISOString().substring(0, 10)
       this.match.players = []
       this.match.winner = ''
       this.match.first = ''
       this.match.red = ''
       this.match.yellow = ''
-      this.match.close()
+      this.close()
     },
     close () {
       this.$emit('display', false)

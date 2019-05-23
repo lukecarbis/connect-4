@@ -4,7 +4,6 @@ import 'firebase/firestore'
 
 firebase.initializeApp(credentials)
 
-export const db = firebase.firestore()
+const db = firebase.firestore()
 
-// Export types that exists in Firestore
-export const { TimeStamp } = firebase.firestore
+export { db }
