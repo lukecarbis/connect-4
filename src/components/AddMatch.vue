@@ -102,10 +102,21 @@ export default {
         return false
       }
 
+      // Format the data for Firestore
       let match = {}
 
-      // Format the data for Firestore
-      match.date = new Date( this.field.date )
+      // Save the current time with the selected date, so that entries appear in order
+      let matchTime = new Date()
+      let matchDate = new Date( this.field.date )
+      match.date = new Date(
+        matchDate.getFullYear(),
+        matchDate.getMonth(),
+        matchDate.getDate(),
+        matchTime.getHours(),
+        matchTime.getMinutes(),
+        matchTime.getSeconds(),
+      )
+
       match.red = db.collection('players').doc( this.field.red )
       match.yellow = db.collection('players').doc( this.field.yellow )
       match.players = [match.red, match.yellow]

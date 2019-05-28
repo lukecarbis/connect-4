@@ -26,7 +26,7 @@ export default {
   },
   firestore () {
     return {
-      matches: db.collection('matches').orderBy('date'),
+      matches: db.collection('matches').orderBy('date', 'desc'),
       players: db.collection('players').orderBy('nickname')
     }
   },
