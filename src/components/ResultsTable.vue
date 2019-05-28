@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="match of matches" v-bind:key="match['.key']">
+    <div v-for="match of matches" v-bind:key="match['.key']" class="match">
       <p>{{getDate(match.date)}}</p>
       <p v-if="match.first === match.red">
         <span class="red">{{match.red.nickname}}</span> vs. <span class="yellow">{{match.yellow.nickname}}</span>
@@ -40,6 +40,13 @@ export default {
 </script>
 
 <style>
+  .match {
+    border: 1px solid #eee;
+    background: #fff;
+    border-radius: 3px;
+    padding: 0 1rem;
+    margin: 1rem 0;
+  }
   .red {
     color: red;
   }

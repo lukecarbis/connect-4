@@ -35,8 +35,33 @@ export default {
 </script>
 
 <style>
+body {
+  margin: 0;
+}
 .app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  padding: 0 20px;
+  padding: 2rem;
+  background: #f5f5f5;
+  margin: 0;
+  color: #222;
+}
+h1 {
+  margin: 0 0 1rem;
+}
+a {
+  color: #444;
+}
+a:hover {
+  color: #000;
+}
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+nav ul li {
+  flex: 0 1 auto;
+  margin: 0.5rem;
 }
 </style>
