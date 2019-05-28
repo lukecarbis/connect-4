@@ -9,6 +9,7 @@
 
     <p>
       <label for="add-match-red">Red Player</label>
+      <player-select></player-select>
       <select v-model="field.red" id="add-match-red">
         <option value="" disabled>Choose a Player</option>
         <option v-for="player of players" :disabled="player.id === field.yellow" :key="player.id" :value="player.id">
@@ -65,6 +66,7 @@
 <script>
 import { db } from '../db'
 import datepicker from 'vue-date'
+import PlayerSelect from './PlayerSelect'
 
 export default {
   data () {
@@ -85,7 +87,8 @@ export default {
     }
   },
   components: {
-    datepicker
+    datepicker,
+    PlayerSelect
   },
   methods: {
     add () {
