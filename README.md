@@ -1,5 +1,7 @@
 # connect-4
 
+This is only a test.
+
 ## Project setup
 ```
 npm install
